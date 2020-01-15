@@ -14,9 +14,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+from __future__ import division
 import tflearn
-from .layers import *
+from layers import *
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
@@ -24,7 +24,7 @@ FLAGS = flags.FLAGS
 class Model(object):
     def __init__(self, **kwargs):
         allowed_kwargs = {'name', 'logging'}
-        for kwarg in list(kwargs.keys()):
+        for kwarg in kwargs.keys():
             assert kwarg in allowed_kwargs, 'Invalid keyword argument: ' + kwarg
         name = kwargs.get('name')
         if not name:
@@ -97,7 +97,7 @@ class Model(object):
             raise AttributeError("TensorFlow session not provided.")
         saver = tf.train.Saver(self.vars)
         save_path = saver.save(sess, "Data/checkpoint/%s.ckpt" % self.name)
-        print(("Model saved in file: %s" % save_path))
+        print("Model saved in file: %s" % save_path)
 
     def load(self, sess=None):
         if not sess:
@@ -106,7 +106,7 @@ class Model(object):
         save_path = "Data/checkpoint/%s.ckpt" % self.name
         #save_path = "checks/tmp/%s.ckpt" % self.name
         saver.restore(sess, save_path)
-        print(("Model restored from file: %s" % save_path))
+        print("Model restored from file: %s" % save_path)
 
 class GCN(Model):
     def __init__(self, placeholders, **kwargs):

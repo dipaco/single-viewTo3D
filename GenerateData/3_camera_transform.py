@@ -6,7 +6,7 @@ Created on Fri Oct 26 12:55:31 2018
 """
 
 import numpy as np
-import cPickle as pickle
+import pickle as pickle
 import cv2
 import os
 

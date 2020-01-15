@@ -14,8 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
-from .inits import *
+from __future__ import division
+from inits import *
 import tensorflow as tf
 
 flags = tf.app.flags
@@ -94,7 +94,7 @@ class Layer(object):
 
     def __init__(self, **kwargs):
         allowed_kwargs = {'name', 'logging'}
-        for kwarg in list(kwargs.keys()):
+        for kwarg in kwargs.keys():
             assert kwarg in allowed_kwargs, 'Invalid keyword argument: ' + kwarg
         name = kwargs.get('name')
         if not name:

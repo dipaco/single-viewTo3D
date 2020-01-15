@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 import tensorflow as tf
-import cPickle as pickle
+import pickle as pickle
 from skimage import io,transform
 from p2m.api import GCN
 from p2m.utils import *
@@ -84,4 +84,4 @@ mesh = np.vstack((vert, face))
 pred_path = FLAGS.image.replace('.png', '.obj')
 np.savetxt(pred_path, mesh, fmt='%s', delimiter=' ')
 
-print 'Saved to', pred_path
+print('Saved to', pred_path)

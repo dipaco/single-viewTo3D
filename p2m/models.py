@@ -14,10 +14,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-from __future__ import division
+
 import tflearn
-from layers import *
-from losses import *
+from .layers import *
+from .losses import *
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
@@ -25,7 +25,7 @@ FLAGS = flags.FLAGS
 class Model(object):
     def __init__(self, **kwargs):
         allowed_kwargs = {'name', 'logging'}
-        for kwarg in kwargs.keys():
+        for kwarg in list(kwargs.keys()):
             assert kwarg in allowed_kwargs, 'Invalid keyword argument: ' + kwarg
         name = kwargs.get('name')
         if not name:
@@ -103,7 +103,7 @@ class Model(object):
             raise AttributeError("TensorFlow session not provided.")
         saver = tf.train.Saver(self.vars)
         save_path = saver.save(sess, "Data/checkpoint/%s.ckpt" % self.name)
-        print("Model saved in file: %s" % save_path)
+        print(("Model saved in file: %s" % save_path))
 
     def load(self, sess=None):
         if not sess:
@@ -112,7 +112,7 @@ class Model(object):
         save_path = "Data/checkpoint/%s.ckpt" % self.name
         #save_path = "checks/tmp/%s.ckpt" % self.name
         saver.restore(sess, save_path)
-        print("Model restored from file: %s" % save_path)
+        print(("Model restored from file: %s" % save_path))
 
 class GCN(Model):
     def __init__(self, placeholders, **kwargs):
@@ -138,9 +138,9 @@ class GCN(Model):
         self.loss += laplace_loss(self.output2_2, self.output3, self.placeholders, 3)
 
         # Weight decay loss
-        conv_layers = range(1,15) + range(17,31) + range(33,48)
+        conv_layers = list(range(1,15)) + list(range(17,31)) + list(range(33,48))
         for layer_id in conv_layers:
-            for var in self.layers[layer_id].vars.values():
+            for var in list(self.layers[layer_id].vars.values()):
                 self.loss += FLAGS.weight_decay * tf.nn.l2_loss(var)
 
     def _build(self):
