@@ -136,12 +136,12 @@ class GraphConvolution(Layer):
 
         self.act = act
         if gcn_block_id == 1:
-			self.support = placeholders['support1']
+            self.support = placeholders['support1']
         elif gcn_block_id == 2:
-			self.support = placeholders['support2']
+            self.support = placeholders['support2']
         elif gcn_block_id == 3:
-			self.support = placeholders['support3']
-			
+            self.support = placeholders['support3']
+
         self.sparse_inputs = sparse_inputs
         self.featureless = featureless
         self.bias = bias
