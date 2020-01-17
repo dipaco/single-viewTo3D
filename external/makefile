@@ -1,6 +1,16 @@
-nvcc = /usr/local/cuda-8.0/bin/nvcc
-cudalib = /usr/local/cuda-8.0/lib64
-tensorflow = /home/wnylol/tools/anaconda2/envs/tensorflow/lib/python2.7/site-packages/tensorflow/include
+#NOTE: Modify the following variables according to the cuda version
+#      and the current installation of python. the following bash
+#      commands can help to find the right folders for the cuda/python
+#      libaries.
+#      TF_LIB=$(python3 -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
+#      tensorflow=$(python3 -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
+#
+#      useful link: https://github.com/nywang16/Pixel2Mesh/issues/32
+
+nvcc = /usr/local/cuda-10.0/bin/nvcc
+cudalib = /usr/local/cuda-10.0/lib64
+tensorflow=/usr/local/lib/python3.6/dist-packages/tensorflow/include
+TF_LIB=/usr/local/lib/python3.6/dist-packages/tensorflow
 
 all: tf_approxmatch_so.so tf_approxmatch_g.cu.o tf_nndistance_so.so tf_nndistance_g.cu.o
 
@@ -14,7 +24,7 @@ tf_approxmatch_g.cu.o: tf_approxmatch_g.cu
 
 
 tf_nndistance_so.so: tf_nndistance_g.cu.o tf_nndistance.cpp
-	g++ -std=c++11 tf_nndistance.cpp tf_nndistance_g.cu.o -o tf_nndistance_so.so -shared -fPIC -I $(tensorflow) -lcudart -L $(cudalib) -O2 -D_GLIBCXX_USE_CXX11_ABI=0
+	g++ -std=c++11 tf_nndistance.cpp tf_nndistance_g.cu.o -o tf_nndistance_so.so -shared -fPIC -I $(tensorflow) -lcudart -L $(cudalib) -O2 -L $(TF_LIB) -ltensorflow_framework -D_GLIBCXX_USE_CXX11_ABI=0
 
 
 tf_nndistance_g.cu.o: tf_nndistance_g.cu
