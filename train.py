@@ -19,7 +19,7 @@ from p2m.utils import *
 from p2m.models import GCN
 from p2m.fetcher import *
 import os
-os.environ['CUDA_VISIBLE_DEVICES'] = '1'
+#os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 # Set random seed
 seed = 1024
@@ -68,7 +68,7 @@ sess.run(tf.global_variables_initializer())
 # Train graph model
 train_loss = open('record_train_loss.txt', 'a')
 train_loss.write('Start training, lr =  %f\n'%(FLAGS.learning_rate))
-pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid_p3.dat', 'rb'))
+pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid_p3.dat', 'rb'), encoding='latin1')
 feed_dict = construct_feed_dict(pkl, placeholders)
 
 train_number = data.number

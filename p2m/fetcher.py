@@ -15,6 +15,7 @@
 # limitations under the License.
 #
 import numpy as np
+import pickle
 import threading
 import queue
 import sys
@@ -39,7 +40,7 @@ class DataFetcher(threading.Thread):
 
 	def work(self, idx):
 		npz = self.npz_list[idx]
-		label = np.load(npz)['arr_0']
+		label = pickle.load(open(npz, 'rb'), encoding='latin1')
 
 		img_path = npz.replace('.dat', '.png')
 		'''
