@@ -15,7 +15,6 @@
 # limitations under the License.
 #
 import numpy as np
-import pickle as pickle
 import threading
 import queue
 import sys
@@ -27,22 +26,22 @@ class DataFetcher(threading.Thread):
 		self.stopped = False
 		self.queue = queue.Queue(64)
 
-		self.pkl_list = []
+		self.npz_list = []
 		with open(file_list, 'r') as f:
 			while(True):
 				line = f.readline().strip()
 				if not line:
 					break
-				self.pkl_list.append(line)
+				self.npz_list.append(line)
 		self.index = 0
-		self.number = len(self.pkl_list)
-		np.random.shuffle(self.pkl_list)
+		self.number = len(self.npz_list)
+		np.random.shuffle(self.npz_list)
 
 	def work(self, idx):
-		pkl_path = self.pkl_list[idx]
-		label = pickle.load(open(pkl_path, 'rb'))
+		npz = self.npz_list[idx]
+		label = np.load(npz)['arr_0']
 
-		img_path = pkl_path.replace('.dat', '.png')
+		img_path = npz.replace('.dat', '.png')
 		'''
 		img = cv2.imread(img_path, cv2.IMREAD_UNCHANGED)
 		img[np.where(img[:,:,3]==0)] = 255
@@ -54,14 +53,14 @@ class DataFetcher(threading.Thread):
 		img = transform.resize(img, (224,224))
 		img = img[:,:,:3].astype('float32')
 
-		return img, label, pkl_path.split('/')[-1]
+		return img, label, npz.split('/')[-1]
 	
 	def run(self):
 		while self.index < 90000000 and not self.stopped:
 			self.queue.put(self.work(self.index % self.number))
 			self.index += 1
 			if self.index % self.number == 0:
-				np.random.shuffle(self.pkl_list)
+				np.random.shuffle(self.npz_list)
 	
 	def fetch(self):
 		if self.stopped:
