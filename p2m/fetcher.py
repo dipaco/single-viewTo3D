@@ -22,7 +22,7 @@ import sys
 from skimage import io,transform
 
 class DataFetcher(threading.Thread):
-	def __init__(self, file_list):
+	def __init__(self, file_list, train_fraction=1.0):
 		super(DataFetcher, self).__init__()
 		self.stopped = False
 		self.queue = queue.Queue(64)
@@ -37,6 +37,9 @@ class DataFetcher(threading.Thread):
 		self.index = 0
 		self.number = len(self.pkl_list)
 		np.random.shuffle(self.pkl_list)
+
+		# selects a fraction of the data set to train
+		self.pkl_list = self.pkl_list[0: int(train_fraction * (self.number - 1))]
 
 	def work(self, idx):
 		pkl = self.pkl_list[idx]
