@@ -35,11 +35,11 @@ class DataFetcher(threading.Thread):
 					break
 				self.pkl_list.append(line)
 		self.index = 0
-		self.number = len(self.pkl_list)
 		np.random.shuffle(self.pkl_list)
 
 		# selects a fraction of the data set to train
-		self.pkl_list = self.pkl_list[0: int(train_fraction * (self.number - 1))]
+		self.pkl_list = self.pkl_list[0: int(train_fraction * (len(self.pkl_list) - 1))]
+		self.number = len(self.pkl_list)
 
 	def work(self, idx):
 		pkl = self.pkl_list[idx]
