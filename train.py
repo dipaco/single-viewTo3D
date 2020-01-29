@@ -87,8 +87,8 @@ feed_dict = construct_feed_dict(pkl, placeholders)
 # Creates summaries to visualize the training
 tf.summary.scalar('total_loss', model.loss)
 merged = tf.summary.merge_all()
-train_writer = model.get_train_writer(sess.graph)
-test_writer = model.get_train_writer(sess.graph)
+train_writer = model.get_train_writer(sess)
+test_writer = model.get_train_writer(sess)
 
 train_number = data.number
 for epoch in range(FLAGS.epochs):
