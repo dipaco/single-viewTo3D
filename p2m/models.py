@@ -16,6 +16,7 @@
 #
 
 import tflearn
+import os
 from .layers import *
 from .losses import *
 
@@ -24,7 +25,7 @@ FLAGS = flags.FLAGS
 
 class Model(object):
     def __init__(self, **kwargs):
-        allowed_kwargs = {'name', 'logging'}
+        allowed_kwargs = {'name', 'logging', 'save_dir'}
         for kwarg in list(kwargs.keys()):
             assert kwarg in allowed_kwargs, 'Invalid keyword argument: ' + kwarg
         name = kwargs.get('name')
@@ -34,6 +35,9 @@ class Model(object):
 
         logging = kwargs.get('logging', False)
         self.logging = logging
+
+        save_dir = kwargs.get('save_dir', 'Data/')
+        self.save_dir = save_dir
 
         self.vars = {}
         self.placeholders = {}
@@ -51,6 +55,10 @@ class Model(object):
         self.loss = 0
         self.optimizer = None
         self.opt_op = None
+
+        # summaries handlers
+        self.train_writer = None
+        self.test_writer = None
 
     def _build(self):
         raise NotImplementedError
@@ -102,17 +110,39 @@ class Model(object):
         if not sess:
             raise AttributeError("TensorFlow session not provided.")
         saver = tf.train.Saver(self.vars)
-        save_path = saver.save(sess, "Data/checkpoint/%s.ckpt" % self.name)
+        save_path = saver.save(sess, os.path.join(self.save_dir, f"checkpoint/{self.name}.ckpt"))
         print(("Model saved in file: %s" % save_path))
 
     def load(self, sess=None):
         if not sess:
             raise AttributeError("TensorFlow session not provided.")
         saver = tf.train.Saver(self.vars)
-        save_path = "Data/checkpoint/%s.ckpt" % self.name
+        save_path = os.path.join(self.save_dir, f"checkpoint/{self.name}.ckpt")
         #save_path = "checks/tmp/%s.ckpt" % self.name
         saver.restore(sess, save_path)
         print(("Model restored from file: %s" % save_path))
+
+    def _create_writer(self, writer_type='train', sess=None):
+        writer_dir = os.path.join(self.save_dir, f'summaries/{writer_type}')
+        if not os.path.exists(writer_dir):
+            os.makedirs(writer_dir)
+
+        writer = tf.summary.FileWriter(writer_dir, sess.graph)
+        return writer
+
+    def get_train_writer(self, sess):
+        if not self.train_writer:
+            self.train_writer = self._create_writer(writer_type='train', sess=sess)
+
+        return self.train_writer
+
+    def get_test_writer(self, sess):
+        if not self.test_writer:
+            self.test_writer = self._create_writer(writer_type='test', sess=sess)
+
+        return self.train_writer
+
+
 
 class GCN(Model):
     def __init__(self, placeholders, **kwargs):

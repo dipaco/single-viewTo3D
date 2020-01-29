@@ -65,7 +65,7 @@ placeholders = {
     'lape_idx': [tf.placeholder(tf.int32, shape=(None, 10)) for _ in range(num_blocks)], #for laplace term
     'pool_idx': [tf.placeholder(tf.int32, shape=(None, 2)) for _ in range(num_blocks-1)] #for unpooling
 }
-model = GCN(placeholders, logging=True)
+model = GCN(placeholders, logging=True, save_dir=args['logging']['save_dir'])
 
 # Load data, initialize session
 data = DataFetcher(FLAGS.data_list)
@@ -84,6 +84,12 @@ train_loss.write('Start training, lr =  %f\n'%(FLAGS.learning_rate))
 pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid_p3.dat', 'rb'), encoding='latin1')
 feed_dict = construct_feed_dict(pkl, placeholders)
 
+# Creates summaries to visualize the training
+tf.summary.scalar('total_loss', model.loss)
+merged = tf.summary.merge_all()
+train_writer = model.get_train_writer(sess.graph)
+test_writer = model.get_train_writer(sess.graph)
+
 train_number = data.number
 for epoch in range(FLAGS.epochs):
 	all_loss = np.zeros(train_number, dtype='float32')
@@ -93,11 +99,12 @@ for epoch in range(FLAGS.epochs):
 		feed_dict.update({placeholders['img_inp']: img_inp})
 		feed_dict.update({placeholders['labels']: y_train})
 
-		# Creates summaries to visualize the training
-		tf.summary.scalar('total_loss', model.loss)
-
 		# Training step
-		_, dists,out1,out2,out3 = sess.run([model.opt_op,model.loss,model.output1,model.output2,model.output3], feed_dict=feed_dict)
+		_, summary, dists,out1,out2,out3 = sess.run([model.opt_op, merged, model.loss,model.output1,model.output2,model.output3], feed_dict=feed_dict)
+
+		# Add the summaries to tensorboard
+		train_writer.add_summary(summary)
+
 		all_loss[iters] = dists
 		mean_loss = np.mean(all_loss[np.where(all_loss)])
 		if (iters+1) % 128 == 0:
