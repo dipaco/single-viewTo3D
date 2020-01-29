@@ -1,0 +1,3 @@
+dataset:
+  train_files: Data/train_list_debug.txt
+  test_files: Data/test_list_debug.txt
