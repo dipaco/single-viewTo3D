@@ -86,12 +86,15 @@ feed_dict = construct_feed_dict(pkl, placeholders)
 
 train_number = data.number
 for epoch in range(FLAGS.epochs):
-	all_loss = np.zeros(train_number,dtype='float32') 
+	all_loss = np.zeros(train_number, dtype='float32')
 	for iters in range(train_number):
 		# Fetch training data
 		img_inp, y_train, data_id = data.fetch()
 		feed_dict.update({placeholders['img_inp']: img_inp})
 		feed_dict.update({placeholders['labels']: y_train})
+
+		# Creates summaries to visualize the training
+		tf.summary.scalar('total_loss', model.loss)
 
 		# Training step
 		_, dists,out1,out2,out3 = sess.run([model.opt_op,model.loss,model.output1,model.output2,model.output3], feed_dict=feed_dict)
