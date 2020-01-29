@@ -19,6 +19,9 @@ from p2m.utils import *
 from p2m.models import GCN
 from p2m.fetcher import *
 import os
+import sys
+import yaml
+
 #os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
 # Set random seed
@@ -26,10 +29,20 @@ seed = 1024
 np.random.seed(seed)
 tf.set_random_seed(seed)
 
+# Arguments -- Read a yaml file with configuration parameters to run the project
+BASE_FOLDER = os.path.dirname(__file__)
+if len(sys.argv) < 2:
+	yml_filename = os.path.join(BASE_FOLDER, 'default.yaml')
+else:
+	yml_filename = sys.argv[1]
+
+with open(yml_filename, 'r') as ymlfile:
+	args = yaml.load(ymlfile)
+
 # Settings
 flags = tf.app.flags
 FLAGS = flags.FLAGS
-flags.DEFINE_string('data_list', 'Data/train_list.txt', 'Data list.') # training data list
+flags.DEFINE_string('data_list', args['dataset']['train_files'], 'Data list.') # training data list
 flags.DEFINE_float('learning_rate', 1e-5, 'Initial learning rate.')
 flags.DEFINE_integer('epochs', 5, 'Number of epochs to train.')
 flags.DEFINE_integer('hidden', 256, 'Number of units in hidden layer.') # gcn hidden layer channel
