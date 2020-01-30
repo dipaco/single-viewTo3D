@@ -123,6 +123,11 @@ class Model(object):
             raise AttributeError("TensorFlow session not provided.")
         saver = tf.train.Saver(self.vars)
         save_path = os.path.join(self.save_dir, f"checkpoint/{self.name}.ckpt")
+
+        if not os.path.exists(save_path):
+            print('There is no model to restore. Training begins from scratch.')
+            return
+
         #save_path = "checks/tmp/%s.ckpt" % self.name
         saver.restore(sess, save_path)
         self.epoch_var = self.vars['epoch']
