@@ -119,7 +119,8 @@ class Model(object):
     def save(self, sess=None):
         if not sess:
             raise AttributeError("TensorFlow session not provided.")
-        saver = tf.train.Saver(self.vars)
+        #saver = tf.train.Saver(self.vars)
+        saver = tf.train.Saver()
         checkpoint_path = os.path.join(self.save_dir, f"checkpoint/{self.name}.ckpt")
         save_path = saver.save(sess, checkpoint_path, global_step=self.global_step)
         print(("Model saved in file: %s" % save_path))
