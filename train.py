@@ -76,7 +76,7 @@ config=tf.ConfigProto()
 config.allow_soft_placement=True
 sess = tf.Session(config=config)
 sess.run(tf.global_variables_initializer())
-#model.load(sess)
+model.load(sess)
 
 # Train graph model
 train_loss = open('record_train_loss.txt', 'a')
@@ -91,7 +91,8 @@ train_writer = model.get_train_writer(sess)
 test_writer = model.get_train_writer(sess)
 
 train_number = data.number
-for epoch in range(FLAGS.epochs):
+saved_epoch = sess.run(model.epoch_var)
+for epoch in range(saved_epoch, FLAGS.epochs):
 	all_loss = np.zeros(train_number, dtype='float32')
 	for iters in range(train_number):
 		# Fetch training data
@@ -110,6 +111,11 @@ for epoch in range(FLAGS.epochs):
 		if (iters+1) % 128 == 0:
 			print('Epoch %d, Iteration %d'%(epoch + 1,iters + 1))
 			print('Mean loss = %f, iter loss = %f, %d'%(mean_loss,dists,data.queue.qsize()))
+
+	# increase epoch counter
+	increase_epoch = tf.assign(model.epoch_var, epoch + 1)
+	sess.run(increase_epoch)
+
 	# Save model
 	model.save(sess)
 	train_loss.write('Epoch %d, loss %f\n'%(epoch+1, mean_loss))

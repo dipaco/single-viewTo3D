@@ -39,7 +39,9 @@ class Model(object):
         save_dir = kwargs.get('save_dir', 'Data/')
         self.save_dir = save_dir
 
+        # Training vars
         self.global_step = tf.train.get_or_create_global_step()
+        self.epoch_var = tf.Variable(0, trainable=False, name='epoch', dtype=tf.int32)  # epoch counter
 
         self.vars = {}
         self.placeholders = {}
@@ -96,6 +98,7 @@ class Model(object):
         # Store model variables for easy access
         variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope=self.name)
         self.vars = {var.name: var for var in variables}
+        self.vars['epoch'] = self.epoch_var
 
         # Build metrics
         self._loss()
@@ -122,6 +125,7 @@ class Model(object):
         save_path = os.path.join(self.save_dir, f"checkpoint/{self.name}.ckpt")
         #save_path = "checks/tmp/%s.ckpt" % self.name
         saver.restore(sess, save_path)
+        self.epoch_var = self.vars['epoch']
         print(("Model restored from file: %s" % save_path))
 
     def _create_writer(self, writer_type='train', sess=None):
