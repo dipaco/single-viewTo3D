@@ -113,7 +113,7 @@ class Model(object):
 
     def has_checkpoint(self):
         # if a checkpoint exists, restore from the latest checkpoint
-        ckpt = tf.train.get_checkpoint_state(os.path.dirname(os.path.join(self.save_dir, 'checkpoint')))
+        ckpt = tf.train.get_checkpoint_state(os.path.dirname(os.path.join(self.save_dir, 'checkpoint/checkpoint')))
         return ckpt and ckpt.model_checkpoint_path
 
     def save(self, sess=None):
