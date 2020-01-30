@@ -133,6 +133,7 @@ class Model(object):
         #save_path = "checks/tmp/%s.ckpt" % self.name
         saver.restore(sess, ckpt.model_checkpoint_path)
         self.epoch_var = self.vars['epoch']
+        tf.train.global_step(sess, self.global_step)
         print(f"Model restored from file: {ckpt.model_checkpoint_path}")
 
     def _create_writer(self, writer_type='train', sess=None):
