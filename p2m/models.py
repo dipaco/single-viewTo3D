@@ -39,6 +39,8 @@ class Model(object):
         save_dir = kwargs.get('save_dir', 'Data/')
         self.save_dir = save_dir
 
+        self.global_step = tf.train.get_or_create_global_step()
+
         self.vars = {}
         self.placeholders = {}
 
@@ -98,7 +100,7 @@ class Model(object):
         # Build metrics
         self._loss()
 
-        self.opt_op = self.optimizer.minimize(self.loss)
+        self.opt_op = self.optimizer.minimize(self.loss, global_step=self.global_step)
 
     def predict(self):
         pass
@@ -141,6 +143,10 @@ class Model(object):
             self.test_writer = self._create_writer(writer_type='test', sess=sess)
 
         return self.train_writer
+
+    def get_step(self):
+        self.global_step = tf.train.get_or_create_global_step()
+        return self.global_step
 
 
 

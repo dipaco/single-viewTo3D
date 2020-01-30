@@ -100,10 +100,10 @@ for epoch in range(FLAGS.epochs):
 		feed_dict.update({placeholders['labels']: y_train})
 
 		# Training step
-		_, summary, dists,out1,out2,out3 = sess.run([model.opt_op, merged, model.loss,model.output1,model.output2,model.output3], feed_dict=feed_dict)
+		_, step, summary, dists,out1,out2,out3 = sess.run([model.opt_op, model.get_step(), merged, model.loss,model.output1,model.output2,model.output3], feed_dict=feed_dict)
 
 		# Add the summaries to tensorboard
-		train_writer.add_summary(summary)
+		train_writer.add_summary(summary, step)
 
 		all_loss[iters] = dists
 		mean_loss = np.mean(all_loss[np.where(all_loss)])
