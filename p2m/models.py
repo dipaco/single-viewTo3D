@@ -99,6 +99,7 @@ class Model(object):
         variables = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES, scope=self.name)
         self.vars = {var.name: var for var in variables}
         self.vars['epoch'] = self.epoch_var
+        self.vars['global_step'] = self.global_step
 
         # Build metrics
         self._loss()
