@@ -128,12 +128,13 @@ class Model(object):
         if not sess:
             raise AttributeError("TensorFlow session not provided.")
         saver = tf.train.Saver(self.vars)
-        save_path = os.path.join(self.save_dir, f"checkpoint/{self.name}.ckpt")
+
+        ckpt = tf.train.get_checkpoint_state(os.path.dirname(os.path.join(self.save_dir, 'checkpoint/checkpoint')))
 
         #save_path = "checks/tmp/%s.ckpt" % self.name
-        saver.restore(sess, save_path)
+        saver.restore(sess, ckpt.model_checkpoint_path)
         self.epoch_var = self.vars['epoch']
-        print(("Model restored from file: %s" % save_path))
+        print(f"Model restored from file: {ckpt.model_checkpoint_path}")
 
     def _create_writer(self, writer_type='train', sess=None):
         writer_dir = os.path.join(self.save_dir, f'summaries/{writer_type}')
