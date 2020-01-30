@@ -76,8 +76,11 @@ config=tf.ConfigProto()
 config.allow_soft_placement=True
 sess = tf.Session(config=config)
 sess.run(tf.global_variables_initializer())
-model.load(sess)
 
+# Restore a previous checkpoint if it exist
+if model.has_checkpoint():
+	model.load(sess)
+	
 # Train graph model
 train_loss = open('record_train_loss.txt', 'a')
 train_loss.write('Start training, lr =  %f\n'%(FLAGS.learning_rate))
