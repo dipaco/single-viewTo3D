@@ -53,7 +53,7 @@ flags.DEFINE_float('weight_decay', 5e-6, 'Weight decay for L2 loss.')
 
 
 # Sets a timer to control training time
-TIMEOUT_TERMINATION_SECS = 3600
+TIMEOUT_TERMINATION_SECS = args['training']['timeout']
 script_starting_time = time.time()
 
 # Define placeholders(dict) and model
