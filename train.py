@@ -21,6 +21,7 @@ from p2m.fetcher import *
 import os
 import sys
 import yaml
+import time
 
 #os.environ['CUDA_VISIBLE_DEVICES'] = '1'
 
@@ -49,6 +50,11 @@ flags.DEFINE_integer('hidden', 256, 'Number of units in hidden layer.') # gcn hi
 flags.DEFINE_integer('feat_dim', 963, 'Number of units in feature layer.') # image feature dim
 flags.DEFINE_integer('coord_dim', 3, 'Number of units in output layer.') 
 flags.DEFINE_float('weight_decay', 5e-6, 'Weight decay for L2 loss.')
+
+
+# Sets a timer to control training time
+TIMEOUT_TERMINATION_SECS = 3600
+script_starting_time = time.time()
 
 # Define placeholders(dict) and model
 num_blocks = 3
@@ -115,9 +121,15 @@ for epoch in range(saved_epoch, FLAGS.epochs):
 			print('Epoch %d, Iteration %d'%(epoch + 1,iters + 1))
 			print('Mean loss = %f, iter loss = %f, %d'%(mean_loss,dists,data.queue.qsize()))
 
+		# Kills the process after one hour of processing.
+		if time.time() - script_starting_time > TIMEOUT_TERMINATION_SECS:
+			print('Time out termination.')
+			exit()
+
 	# increase epoch counter
 	increase_epoch = tf.assign(model.epoch_var, epoch + 1)
 	sess.run(increase_epoch)
+
 
 	# Save model
 	model.save(sess)
