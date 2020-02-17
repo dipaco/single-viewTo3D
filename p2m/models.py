@@ -112,6 +112,9 @@ class Model(object):
     def _loss(self):
         raise NotImplementedError
 
+    def summaries(self):
+        raise NotImplementedError
+
     def has_checkpoint(self):
         # if a checkpoint exists, restore from the latest checkpoint
         ckpt = tf.train.get_checkpoint_state(os.path.dirname(os.path.join(self.save_dir, 'checkpoint/checkpoint')))
@@ -303,3 +306,17 @@ class GCN(Model):
         # updata image feature
         self.placeholders.update({'img_feat': [tf.squeeze(x2), tf.squeeze(x3), tf.squeeze(x4), tf.squeeze(x5)]})
         self.loss += tf.add_n(tf.get_collection(tf.GraphKeys.REGULARIZATION_LOSSES)) * 0.3
+
+    def _self_inter(self):
+        ''''''
+        return tf.constant(6)
+
+    def metrics(self):
+        """
+            Returns a list of  metrics to evaluate the model
+        """
+        summaries_dict = list()
+
+        # Assess self intersection of the predicted mesh
+        summaries_dict.append({'name': 'self-intersection', 'var': self._self_inter()})
+
