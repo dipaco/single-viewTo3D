@@ -320,3 +320,5 @@ class GCN(Model):
         # Assess self intersection of the predicted mesh
         summaries_dict.append({'name': 'self-intersection', 'var': self._self_inter()})
 
+        return summaries_dict
+
