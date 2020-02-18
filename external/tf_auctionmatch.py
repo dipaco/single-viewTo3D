@@ -1,10 +1,14 @@
 import os
+import os.path as osp
 import tensorflow as tf
 from tensorflow.python.framework import ops
-auctionmatch_module = tf.load_op_library('./emd/tf_auctionmatch_so.so')
+
+base_dir = osp.dirname(osp.abspath(__file__))
+
+auctionmatch_module = tf.load_op_library(osp.join(base_dir, 'tf_auctionmatch_so.so'))
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import numpy as np
-import emd.tf_sampling as tf_sampling
+import tf_sampling
 
 
 def auction_match(xyz1,xyz2):

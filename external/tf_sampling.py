@@ -1,6 +1,10 @@
 import tensorflow as tf
+import os.path as osp
 from tensorflow.python.framework import ops
-sampling_module=tf.load_op_library('./emd/tf_sampling_so.so')
+
+base_dir = osp.dirname(osp.abspath(__file__))
+
+sampling_module = tf.load_op_library(osp.join(base_dir, 'tf_sampling_so.so'))
 def prob_sample(inp,inpr):
 	'''
 input:

@@ -19,6 +19,7 @@ import tflearn
 import os
 from .layers import *
 from .losses import *
+from .metrics import *
 
 flags = tf.app.flags
 FLAGS = flags.FLAGS
@@ -319,6 +320,10 @@ class GCN(Model):
 
         # Assess self intersection of the predicted mesh
         summaries_dict.append({'name': 'self-intersection', 'var': self._self_inter()})
+
+        # Assess the EMD between the predicted mesh and the ground truth mesh
+        dist, matched_out = emd_distance(self.output3, self.placeholders, 3)
+        summaries_dict.append({'name': 'EMD', 'var': tf.reduce_mean(dist, axis=-1)})
 
         return summaries_dict
 
