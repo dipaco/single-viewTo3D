@@ -94,7 +94,7 @@ pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid_p3.dat', 'rb'), encoding='
 feed_dict = construct_feed_dict(pkl, placeholders)
 
 # Creates summaries to visualize the training
-[tf.summary.scalar(metric['name'], metric['var']) for metric in model.metrics] # a summary for every evaluation metric
+[tf.summary.scalar(metric['name'], metric['var']) for metric in model.metrics()] # a summary for every evaluation metric
 tf.summary.scalar('total_loss', model.loss)
 #image_tensor = exit()#draw_scatter(scaled, ['r', 'g'])
 #image_summary = tf.summary.image('scatter', image_tensor)
