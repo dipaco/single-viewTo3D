@@ -9,11 +9,11 @@
 
 nvcc = /usr/local/cuda-10.0/bin/nvcc
 cudalib = /usr/local/cuda-10.0/lib64
+cudalib_include = /usr/local/cuda-10.0/include
 tensorflow=/usr/local/lib/python3.6/dist-packages/tensorflow/include
 TF_LIB=/usr/local/lib/python3.6/dist-packages/tensorflow
 
-all: tf_approxmatch_so.so tf_approxmatch_g.cu.o tf_nndistance_so.so tf_nndistance_g.cu.o
-
+all: tf_approxmatch_so.so tf_approxmatch_g.cu.o tf_nndistance_so.so tf_nndistance_g.cu.o tf_auctionmatch_so.so tf_auctionmatch_g.cu tf_sampling_so.so tf_sampling_g.cu.o
 
 tf_approxmatch_so.so: tf_approxmatch_g.cu.o tf_approxmatch.cpp
 	g++ -std=c++11 tf_approxmatch.cpp tf_approxmatch_g.cu.o -o tf_approxmatch_so.so -shared -fPIC -I $(tensorflow) -lcudart -L $(cudalib) -O2 -D_GLIBCXX_USE_CXX11_ABI=0
@@ -30,8 +30,21 @@ tf_nndistance_so.so: tf_nndistance_g.cu.o tf_nndistance.cpp
 tf_nndistance_g.cu.o: tf_nndistance_g.cu
 	$(nvcc) -D_GLIBCXX_USE_CXX11_ABI=0 -std=c++11 -c -o tf_nndistance_g.cu.o tf_nndistance_g.cu -I $(tensorflow) -DGOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2
 
+tf_auctionmatch_so.so: tf_auctionmatch_g.cu.o tf_auctionmatch.cpp
+	g++ -std=c++11 tf_auctionmatch.cpp tf_auctionmatch_g.cu.o -o tf_auctionmatch_so.so -shared -fPIC -I $(tensorflow) -lcudart -L $(cudalib) -O2 -D_GLIBCXX_USE_CXX11_ABI=0
+
+tf_auctionmatch_g.cu.o: tf_auctionmatch_g.cu
+	$(nvcc) -D_GLIBCXX_USE_CXX11_ABI=0 -std=c++11 -c -o tf_auctionmatch_g.cu.o tf_auctionmatch_g.cu -I $(tensorflow) -DGOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2
+	
+tf_sampling_so.so: tf_sampling_g.cu.o tf_sampling.cpp
+	g++ -std=c++11 tf_sampling.cpp tf_sampling_g.cu.o -o tf_sampling_so.so -shared -fPIC -I $(tensorflow) -lcudart -L $(cudalib) -O2 -D_GLIBCXX_USE_CXX11_ABI=0 -I $(cudalib_include)
+
+tf_sampling_g.cu.o: tf_sampling_g.cu
+	$(nvcc) -D_GLIBCXX_USE_CXX11_ABI=0 -std=c++11 -c -o tf_sampling_g.cu.o tf_sampling_g.cu -I $(tensorflow) -DGOOGLE_CUDA=1 -x cu -Xcompiler -fPIC -O2
 
 clean:
 	rm tf_approxmatch_so.so
 	rm tf_nndistance_so.so
+	rm tf_auctionmatch_so.so
+	rm tf_sampling_so.so
 	rm  *.cu.o 
