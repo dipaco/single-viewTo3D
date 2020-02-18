@@ -1,7 +1,7 @@
 import tensorflow as tf
 import sys
 
-auctionmatch_module = tf.load_op_library('./external/tf_auctionmatch_so.so')
+#auctionmatch_module = tf.load_op_library('./external/tf_auctionmatch_so.so')
 sys.path.append('./external')
 import tensorflow as tf
 import tf_sampling
