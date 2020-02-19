@@ -97,7 +97,7 @@ feed_dict = construct_feed_dict(pkl, placeholders)
 # Creates summaries to visualize the training
 [tf.summary.scalar(metric['name'], metric['var']) for metric in model.metrics()] # a summary for every evaluation metric
 tf.summary.scalar('total_loss', model.loss)
-image_tensor = draw_render(vertices=model.output3, faces=tf.convert_to_tensor(pkl[5][2]))
+image_tensor = draw_render(model.output3, tf.convert_to_tensor(pkl[5][2]))
 image_summary = tf.summary.image('Render 1', image_tensor)
 merged = tf.summary.merge_all()
 train_writer = model.get_train_writer(sess)

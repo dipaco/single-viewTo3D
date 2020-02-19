@@ -2,6 +2,9 @@ import tfmpl
 import pyrender
 import numpy as np
 import trimesh
+import pdb
+import os
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 @tfmpl.figure_tensor
 def draw_scatter(scaled, colors):
@@ -16,7 +19,8 @@ def draw_scatter(scaled, colors):
     return figs
 
 @tfmpl.figure_tensor
-def draw_render(vertices, faces, colors=['b']):
+def draw_render(vertices, faces):
+    colors = ['r']
     '''Draw scatter plots. One for each color.'''
     figs = tfmpl.create_figures(len(colors), figsize=(4,4))
     for idx, f in enumerate(figs):
