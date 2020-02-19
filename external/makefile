@@ -7,12 +7,12 @@
 #
 #      useful link: https://github.com/nywang16/Pixel2Mesh/issues/32
 
-nvcc = /usr/local/cuda-10.0/bin/nvcc
-cudalib = /usr/local/cuda-10.0/lib64
-cudalib_include = /usr/local/cuda-10.0/include
-tensorflow=/usr/local/lib/python3.6/dist-packages/tensorflow/include
-external_nsync = /usr/local/lib/python3.6/dist-packages/tensorflow/include/external/nsync/public
-TF_LIB=/usr/local/lib/python3.6/dist-packages/tensorflow
+nvcc = /usr/local/cuda-10.1/bin/nvcc
+cudalib = /usr/local/cuda-10.1/lib64
+cudalib_include = /usr/local/cuda-10.1/include
+tensorflow=/home/diegopc/.local/lib/python3.6/site-packages/tensorflow/include
+external_nsync = /home/diegopc/.local/lib/python3.6/dist-packages/tensorflow/include/external/nsync/public
+TF_LIB=/home/diegopc/.local/lib/python3.6/dist-packages/tensorflow
 
 all: tf_approxmatch_so.so tf_approxmatch_g.cu.o tf_nndistance_so.so tf_nndistance_g.cu.o tf_auctionmatch_so.so tf_auctionmatch_g.cu tf_sampling_so.so tf_sampling_g.cu.o
 
