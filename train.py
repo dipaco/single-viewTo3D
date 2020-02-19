@@ -94,9 +94,6 @@ train_loss.write('Start training, lr =  %f\n'%(FLAGS.learning_rate))
 pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid_p3.dat', 'rb'), encoding='latin1')
 feed_dict = construct_feed_dict(pkl, placeholders)
 
-train_number = data.number
-saved_epoch = sess.run(model.epoch_var)
-
 # Creates summaries to visualize the training
 [tf.summary.scalar(metric['name'], metric['var']) for metric in model.metrics()] # a summary for every evaluation metric
 tf.summary.scalar('total_loss', model.loss)
@@ -106,6 +103,8 @@ merged = tf.summary.merge_all()
 train_writer = model.get_train_writer(sess)
 test_writer = model.get_train_writer(sess)
 
+train_number = data.number
+saved_epoch = sess.run(model.epoch_var)
 for epoch in range(saved_epoch, FLAGS.epochs):
 	all_loss = np.zeros(train_number, dtype='float32')
 	for iters in range(train_number):
