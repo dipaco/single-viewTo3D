@@ -17,13 +17,16 @@ def emd_distance(pred, placeholders, block_id):
         output: dist: (batch_size,#point_1)   distance from first to second
         output: matched_out:  (batch_size,#point_1, 3)   nearest neighbor from first to second
     """
+    # TODO: properly manage the number of points on each set
+    n_points = 1024
+    gt_pt = placeholders['labels'][:, :3][:n_points, ...][None, ...]  # gt points
+    pred = pred[:n_points, ...][None, ...]
 
-    gt_pt = placeholders['labels'][:, :3][None, ...]  # gt points
-    pred = pred[None, ...]
-
+    # Auction assignment
     matchl_out, matchr_out = tf_auctionmatch.auction_match(gt_pt, pred)
     matched_out = tf_sampling.gather_point(pred, matchl_out)
 
+    # Compute the distances from the original points to the assignment
     dist = tf.sqrt(tf.reduce_sum((gt_pt - matched_out) ** 2, axis=2))
 
     return dist, matched_out

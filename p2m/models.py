@@ -323,7 +323,7 @@ class GCN(Model):
 
         # Assess the EMD between the predicted mesh and the ground truth mesh
         dist, matched_out = emd_distance(self.output3, self.placeholders, 3)
-        summaries_dict.append({'name': 'EMD', 'var': tf.reduce_mean(dist, axis=-1)})
+        summaries_dict.append({'name': 'EMD', 'var': tf.reduce_mean(dist)})
 
         return summaries_dict
 
