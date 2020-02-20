@@ -1,10 +1,12 @@
 import tfmpl
-import pyrender
 import numpy as np
 import trimesh
 import pdb
 import os
+import matplotlib.pyplot as plt
 os.environ['PYOPENGL_PLATFORM'] = 'egl'
+#os.environ['EGL_DEVICE_ID'] = os.environ['SLURM_STEP_GPUS'].split(',')[0]
+import pyrender
 
 @tfmpl.figure_tensor
 def draw_scatter(scaled, colors):
