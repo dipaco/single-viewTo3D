@@ -4,6 +4,9 @@ import numpy as np
 import trimesh
 import pdb
 import os
+from mpl_toolkits.mplot3d import Axes3D
+from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+import matplotlib.pylab as plt
 os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 @tfmpl.figure_tensor
@@ -19,7 +22,39 @@ def draw_scatter(scaled, colors):
     return figs
 
 @tfmpl.figure_tensor
-def draw_render(vertices, faces):
+def draw_render(vertices, faces, render_type='matplotlib'):
+    if render_type == 'matplotlib':
+        _matplotlib_render(vertices, faces)
+    else:
+        raise NotImplementedError()
+
+
+def _matplotlib_render(vertices, faces):
+    colors = ['r']
+    '''Draw scatter plots. One for each color.'''
+    figs = tfmpl.create_figures(len(colors), figsize=(4,4))
+    for idx, f in enumerate(figs):
+        ax = f.add_subplot(111, projection='3d')
+        ax.axis('off')
+
+        # getting the triangles of the mesh
+
+        pdb.set_trace()
+        triangles = []
+
+
+        ax.add_collection3d(
+            Poly3DCollection(triangles, facecolors='blue', linewidths=.1, edgecolors='black', alpha=0.1))
+        _set_unit_limits_in_3d_plot(ax)
+
+        # plotting the redered image
+        #ax.imshow(color)
+        f.tight_layout()
+
+    return figs
+
+
+def _pyrender_render(vertices, faces):
     colors = ['r']
     '''Draw scatter plots. One for each color.'''
     figs = tfmpl.create_figures(len(colors), figsize=(4,4))
@@ -54,3 +89,15 @@ def draw_render(vertices, faces):
         f.tight_layout()
 
     return figs
+
+
+def _set_unit_limits_in_3d_plot(ax):
+    ax.set_xlabel('X')
+    ax.set_ylabel('Y')
+    ax.set_zlabel('Z')
+    ax.set_xlim(-1, 1)
+    ax.set_ylim(-1, 1)
+    ax.set_zlim(-1, 1)
+    ax.set_zticks([-1, 0, 1])
+    plt.xticks([-1, 0, 1])
+    plt.yticks([-1, 0, 1])
