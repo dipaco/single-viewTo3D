@@ -57,7 +57,8 @@ class DataFetcher(threading.Thread):
 		img = transform.resize(img, (224,224))
 		img = img[:,:,:3].astype('float32')
 
-		return img, label, pkl.split('/')[-1]
+		parts = pkl.split('/')
+		return img, label, parts[-1], parts[-3], parts[-4]
 	
 	def run(self):
 		while self.index < 90000000 and not self.stopped:

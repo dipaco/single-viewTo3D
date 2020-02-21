@@ -113,7 +113,7 @@ for epoch in range(saved_epoch, FLAGS.epochs):
 	all_loss = np.zeros(train_number, dtype='float32')
 	for iters in range(train_number):
 		# Fetch training data
-		img_inp, y_train, data_id = data.fetch()
+		img_inp, y_train, data_id, obj_id, class_id = data.fetch()
 		feed_dict.update({placeholders['img_inp']: img_inp})
 		feed_dict.update({placeholders['labels']: y_train})
 
