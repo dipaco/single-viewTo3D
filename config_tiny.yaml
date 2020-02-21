@@ -5,3 +5,6 @@ logging:
   save_dir: Data/logs/log_tiny
 training:
   timeout: 2400
+summaries:
+  show_renders: True
+  render: [0, 7, 15]
