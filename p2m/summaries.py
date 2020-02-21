@@ -24,13 +24,13 @@ def draw_scatter(scaled, colors):
     return figs
 
 @tfmpl.figure_tensor
-def draw_render(vertices, faces, render_type='matplotlib'):
+def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
     angles = [0, np.pi/3, 2*np.pi/3]
     '''Draw scatter plots. One for each color.'''
-    figs = tfmpl.create_figures(len(angles), figsize=(2,2), dpi=200)
+    figs = tfmpl.create_figures(len(angles) + 1, figsize=(2,2), dpi=200)
     for idx, f in enumerate(figs):
         ax = f.add_subplot(111, projection='3d')
-        ax.axis('off')
+        #ax.axis('off')
 
         # getting the triangles of the mesh
         vertices -= vertices.mean(axis=0)
@@ -49,7 +49,10 @@ def draw_render(vertices, faces, render_type='matplotlib'):
             Poly3DCollection(triangles, facecolors='lightgray', linewidths=.1, edgecolors='black', alpha=0.2))
         _set_unit_limits_in_3d_plot(ax)
 
-        #f.tight_layout()
+    ax = f.add_subplot(111, projection='3d')
+    #ax.axis('off')
+    ax.scatter(gt_points[:, 0], gt_points[:, 1], gt_points[:, 2], c='lightgray', marker='.', s=10)
+    _set_unit_limits_in_3d_plot(ax)
 
     return figs
 

@@ -100,7 +100,7 @@ scalar_summaries.append(tf.summary.scalar('total_loss', model.loss))
 
 render_summaries = []
 if args['summaries']['show_renders']:
-	image_tensor = draw_render(model.output3, tf.convert_to_tensor(pkl[5][2]), 'matplotlib')
+	image_tensor = draw_render(placeholders['labels'], model.output3, tf.convert_to_tensor(pkl[5][2]), 'matplotlib')
 	for obj_id in args['summaries']['render']:
 		render_summaries.append(tf.summary.image(f'Render {obj_id}', image_tensor))
 
