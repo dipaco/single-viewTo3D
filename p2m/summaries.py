@@ -25,32 +25,24 @@ def draw_scatter(scaled, colors):
 
 @tfmpl.figure_tensor
 def draw_render(vertices, faces, render_type='matplotlib'):
-    if render_type == 'matplotlib':
-        _matplotlib_render(vertices, faces)
-    else:
-        raise NotImplementedError()
-
-
-def _matplotlib_render(vertices, faces):
     colors = ['r']
     '''Draw scatter plots. One for each color.'''
-    figs = tfmpl.create_figures(len(colors), figsize=(4,4))
+    figs = tfmpl.create_figures(len(colors), figsize=(2,2))
     for idx, f in enumerate(figs):
         ax = f.add_subplot(111, projection='3d')
         ax.axis('off')
 
         # getting the triangles of the mesh
-
-        pdb.set_trace()
-        triangles = []
+        vertices -=  vertices.mean(axis=0)
+        vertices /= np.linalg.norm(vertices, axis=1).max()
+        triangles = [vertices[faces[:, i], :] for i in range(faces.shape[1])]
+        triangles = np.transpose(triangles, axes=[1, 0, 2])
 
 
         ax.add_collection3d(
             Poly3DCollection(triangles, facecolors='blue', linewidths=.1, edgecolors='black', alpha=0.1))
         _set_unit_limits_in_3d_plot(ax)
 
-        # plotting the redered image
-        #ax.imshow(color)
         f.tight_layout()
 
     return figs
