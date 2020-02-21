@@ -51,7 +51,7 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
         _set_unit_limits_in_3d_plot(ax)
         f.tight_layout()
 
-    ax = f.add_subplot(111, projection='3d')
+    ax = figs[-1].add_subplot(111, projection='3d')
     ax.axis('off')
     p_idx = np.random.choice(gt_points.shape[0], 1024, replace=False)
     gt_points = gt_points[p_idx, :3]  - gt_points[p_idx, :3].mean(axis=0)
