@@ -40,9 +40,9 @@ def draw_render(vertices, faces, render_type='matplotlib'):
 
         # rotate the mesh
         ang = angles[idx]
-        rot_mat = np.array([[np.cos(ang), -np.sin(ang), 0.0],
-                            [np.sin(ang), np.cos(ang), 0.0],
-                            [0.0, 0.0, 1.0]])
+        rot_mat = np.array([[np.cos(ang), 0.0, np.sin(ang)],
+                            [0.0, 1.0, 0.0],
+                            [-np.sin(ang), 0.0, np.cos(ang)]])
         triangles = np.einsum('dc,npc -> npd', rot_mat, triangles)
 
         ax.add_collection3d(
