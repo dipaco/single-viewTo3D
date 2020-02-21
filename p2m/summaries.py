@@ -25,13 +25,13 @@ def draw_scatter(scaled, colors):
 
 @tfmpl.figure_tensor
 def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
-    angles = [0, np.pi/3, 2*np.pi/3]
+    angles = [0, np.pi/3]
     '''Draw scatter plots. One for each color.'''
-    figs = tfmpl.create_figures(len(angles) + 1, figsize=(2, 2), dpi=200)
+    figs = tfmpl.create_figures(len(angles) + 1, figsize=(2, 2), dpi=150)
     for idx in range(len(angles)):
         f = figs[idx]
         ax = f.add_subplot(111, projection='3d')
-        ax.axis('off')
+        #ax.axis('off')
 
         # getting the triangles of the mesh
         vertices -= vertices.mean(axis=0)
@@ -52,13 +52,13 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
         f.tight_layout()
 
     ax = figs[-1].add_subplot(111, projection='3d')
-    ax.axis('off')
+    #ax.axis('off')
     p_idx = np.random.choice(gt_points.shape[0], 1024, replace=False)
     gt_points = gt_points[p_idx, :3]  - gt_points[p_idx, :3].mean(axis=0)
     gt_points /= np.linalg.norm(gt_points, axis=1).max()
     ax.scatter(gt_points[:, 0], gt_points[:, 1], gt_points[:, 2], c='gray', marker='.', s=10)
     _set_unit_limits_in_3d_plot(ax)
-    f.tight_layout()
+    figs[-1].tight_layout()
 
     return figs
 
