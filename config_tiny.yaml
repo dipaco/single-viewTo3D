@@ -7,4 +7,4 @@ training:
   timeout: 2400
 summaries:
   show_renders: True
-  render: [0, 7, 15]
+  render: ['51670c355ece91abe24f4cc9bc86052a', '6bf75ddeac192594bda733a39f84326d']
