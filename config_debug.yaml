@@ -3,3 +3,8 @@ dataset:
   test_files: Data/test_list_debug.txt
 logging:
     save_dir: Data/logs/log_debug
+training:
+  timeout: 24000
+summaries:
+  show_renders: True
+  render: ['196d35794f869816db6f03b6829a5891', '5482bda23163df4f30e916fac260c672', '65f77283a392890aa8cba409c4409ba9']
