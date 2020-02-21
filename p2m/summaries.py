@@ -28,7 +28,8 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
     angles = [0, np.pi/3, 2*np.pi/3]
     '''Draw scatter plots. One for each color.'''
     figs = tfmpl.create_figures(len(angles) + 1, figsize=(2,2), dpi=200)
-    for idx, f in enumerate(figs):
+    for idx in range(len(angles)):
+        f = figs[idx]
         ax = f.add_subplot(111, projection='3d')
         #ax.axis('off')
 
