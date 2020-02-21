@@ -9,7 +9,7 @@ import tf_auctionmatch
 from tensorflow.python.framework import ops
 
 
-def emd_distance(pred, placeholders, block_id):
+def emd_distance(pred, placeholders, block_id=3):
     """
         Computes the EMD distance  for a pair of point clouds
         input: xyz1: (batch_size,#points_1,3)  the first point cloud
@@ -31,3 +31,15 @@ def emd_distance(pred, placeholders, block_id):
 
     return dist, matched_out
 
+
+def edge_length_metric(pred, placeholders, block_id=3):
+    # edge in graph
+    nod1 = tf.gather(pred, placeholders['edges'][block_id - 1][:, 0])
+    nod2 = tf.gather(pred, placeholders['edges'][block_id - 1][:, 1])
+    edge = tf.subtract(nod1, nod2)
+
+    # edge length loss
+    edge_length = tf.reduce_sum(tf.square(edge), 1)
+    edge_loss = tf.reduce_mean(edge_length)
+
+    return edge_loss
