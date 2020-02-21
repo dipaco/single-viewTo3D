@@ -99,9 +99,9 @@ scalar_summaries = [tf.summary.scalar(metric['name'], metric['var']) for metric 
 scalar_summaries.append(tf.summary.scalar('total_loss', model.loss))
 
 render_summaries = []
-if args['summaries']['show_reders']:
+if args['summaries']['show_renders']:
+	image_tensor = draw_render(model.output3, tf.convert_to_tensor(pkl[5][2]), 'matplotlib')
 	for obj_id in args['summaries']['render']:
-		image_tensor = draw_render(model.output3, tf.convert_to_tensor(pkl[5][2]), 'matplotlib')
 		render_summaries.append(tf.summary.image(f'Render {obj_id}', image_tensor))
 
 train_writer = model.get_train_writer(sess)
@@ -121,13 +121,13 @@ for epoch in range(saved_epoch, FLAGS.epochs):
 
 		tensors = [model.opt_op, model.get_step(), model.loss, model.output1, model.output2, model.output3]
 		tensors.extend(scalar_summaries)
-		for r_s in range(render_summaries):
-			if iters in args['summaries']['render']:
-				tensors.append(r_s)
-
+		
+		if iters in args['summaries']['render']:
+			tensors.append(render_summaries[args['summaries']['render'].index(iters)])
+		
 		output = sess.run(tensors, feed_dict=feed_dict)
 		#_, step, dists, out1, out2, out3, summary...
-		step = output[1], dists = output[2], out1 = output[3], out2 = output[4], out3 = output[5]
+		_, step, dists, out1, out2, out3 = output[:6]
 
 		# Add the summaries to tensorboard
 		[train_writer.add_summary(s, step) for s in output[6:]]		# the rest of the outputs are summaries

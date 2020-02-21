@@ -27,7 +27,7 @@ def draw_scatter(scaled, colors):
 def draw_render(vertices, faces, render_type='matplotlib'):
     colors = ['r']
     '''Draw scatter plots. One for each color.'''
-    figs = tfmpl.create_figures(len(colors), figsize=(3,3), dpi=100)
+    figs = tfmpl.create_figures(len(colors), figsize=(2,2), dpi=200)
     for idx, f in enumerate(figs):
         ax = f.add_subplot(111, projection='3d')
         ax.axis('off')
@@ -40,7 +40,7 @@ def draw_render(vertices, faces, render_type='matplotlib'):
 
 
         ax.add_collection3d(
-            Poly3DCollection(triangles, facecolors='ligthgray', linewidths=.05, edgecolors='black', alpha=0.2))
+            Poly3DCollection(triangles, facecolors='lightgray', linewidths=.1, edgecolors='black', alpha=0.2))
         _set_unit_limits_in_3d_plot(ax)
 
         #f.tight_layout()
@@ -89,9 +89,9 @@ def _set_unit_limits_in_3d_plot(ax):
     ax.set_xlabel('X')
     ax.set_ylabel('Y')
     ax.set_zlabel('Z')
-    ax.set_xlim(-1, 1)
-    ax.set_ylim(-1, 1)
-    ax.set_zlim(-1, 1)
+    ax.set_xlim(-0.8, 0.8)
+    ax.set_ylim(-0.8, 0.8)
+    ax.set_zlim(-0.8, 0.8)
     ax.set_zticks([-1, 0, 1])
     plt.xticks([-1, 0, 1])
     plt.yticks([-1, 0, 1])
