@@ -121,9 +121,9 @@ for epoch in range(saved_epoch, FLAGS.epochs):
 
 		tensors = [model.opt_op, model.get_step(), model.loss, model.output1, model.output2, model.output3]
 		tensors.extend(scalar_summaries)
-		
-		if iters in args['summaries']['render']:
-			tensors.append(render_summaries[args['summaries']['render'].index(iters)])
+
+		if obj_id in args['summaries']['render']:
+			tensors.append(render_summaries[args['summaries']['render'].index(obj_id)])
 		
 		output = sess.run(tensors, feed_dict=feed_dict)
 		#_, step, dists, out1, out2, out3, summary...
