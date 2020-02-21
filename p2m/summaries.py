@@ -25,19 +25,25 @@ def draw_scatter(scaled, colors):
 
 @tfmpl.figure_tensor
 def draw_render(vertices, faces, render_type='matplotlib'):
-    colors = ['r']
+    angles = [0, np.pi/3, 2*np.pi/3]
     '''Draw scatter plots. One for each color.'''
-    figs = tfmpl.create_figures(len(colors), figsize=(2,2), dpi=200)
+    figs = tfmpl.create_figures(len(angles), figsize=(2,2), dpi=200)
     for idx, f in enumerate(figs):
         ax = f.add_subplot(111, projection='3d')
         ax.axis('off')
 
         # getting the triangles of the mesh
-        vertices -=  vertices.mean(axis=0)
+        vertices -= vertices.mean(axis=0)
         vertices /= np.linalg.norm(vertices, axis=1).max()
         triangles = [vertices[faces[:, i], :] for i in range(faces.shape[1])]
         triangles = np.transpose(triangles, axes=[1, 0, 2])
 
+        # rotate the mesh
+        ang = angles[idx]
+        rot_mat = np.array([[np.cos(ang), -np.sin(ang), 0.0],
+                            [np.sin(ang), np.cos(ang), 0.0],
+                            [0.0, 0.0, 1.0]])
+        triangles = np.einsum('dc,npc -> npd', rot_mat, triangles)
 
         ax.add_collection3d(
             Poly3DCollection(triangles, facecolors='lightgray', linewidths=.1, edgecolors='black', alpha=0.2))
@@ -92,6 +98,6 @@ def _set_unit_limits_in_3d_plot(ax):
     ax.set_xlim(-0.8, 0.8)
     ax.set_ylim(-0.8, 0.8)
     ax.set_zlim(-0.8, 0.8)
-    ax.set_zticks([-1, 0, 1])
-    plt.xticks([-1, 0, 1])
-    plt.yticks([-1, 0, 1])
+    #ax.set_zticks([-1, 0, 1])
+    #plt.xticks([-1, 0, 1])
+    #plt.yticks([-1, 0, 1])
