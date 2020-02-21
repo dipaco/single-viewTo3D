@@ -27,11 +27,11 @@ def draw_scatter(scaled, colors):
 def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
     angles = [0, np.pi/3, 2*np.pi/3]
     '''Draw scatter plots. One for each color.'''
-    figs = tfmpl.create_figures(len(angles) + 1, figsize=(2,2), dpi=200)
+    figs = tfmpl.create_figures(len(angles) + 1, figsize=(2, 2), dpi=200)
     for idx in range(len(angles)):
         f = figs[idx]
         ax = f.add_subplot(111, projection='3d')
-        #ax.axis('off')
+        ax.axis('off')
 
         # getting the triangles of the mesh
         vertices -= vertices.mean(axis=0)
@@ -41,21 +41,23 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
 
         # rotate the mesh
         ang = angles[idx]
-        rot_mat = np.array([[np.cos(ang), 0.0, np.sin(ang)],
-                            [0.0, 1.0, 0.0],
-                            [-np.sin(ang), 0.0, np.cos(ang)]])
+        rot_mat = np.array([[np.cos(ang), -np.sin(ang), 0.0],
+                            [np.sin(ang), np.cos(ang), 0.0],
+                            [0.0, 0.0, 1.0]])
         triangles = np.einsum('dc,npc -> npd', rot_mat, triangles)
 
         ax.add_collection3d(
             Poly3DCollection(triangles, facecolors='lightgray', linewidths=.1, edgecolors='black', alpha=0.2))
         _set_unit_limits_in_3d_plot(ax)
+        f.tight_layout()
 
     ax = f.add_subplot(111, projection='3d')
-    #ax.axis('off')
+    ax.axis('off')
     gt_points -= gt_points.mean(axis=0)
     gt_points /= np.linalg.norm(gt_points, axis=1).max()
-    ax.scatter(gt_points[:, 0], gt_points[:, 1], gt_points[:, 2], c='lightgray', marker='.', s=10)
+    ax.scatter(gt_points[:, 0], gt_points[:, 1], gt_points[:, 2], c='gray', marker='.', s=10)
     _set_unit_limits_in_3d_plot(ax)
+    f.tight_layout()
 
     return figs
 
