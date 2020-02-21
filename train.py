@@ -95,11 +95,15 @@ pkl = pickle.load(open('Data/ellipsoid/info_ellipsoid_p3.dat', 'rb'), encoding='
 feed_dict = construct_feed_dict(pkl, placeholders)
 
 # Creates summaries to visualize the training
-[tf.summary.scalar(metric['name'], metric['var']) for metric in model.metrics()] # a summary for every evaluation metric
-tf.summary.scalar('total_loss', model.loss)
-image_tensor = draw_render(model.output3, tf.convert_to_tensor(pkl[5][2]), 'matplotlib')
-image_summary = tf.summary.image('Render 1', image_tensor)
-merged = tf.summary.merge_all()
+scalar_summaries = [tf.summary.scalar(metric['name'], metric['var']) for metric in model.metrics()] # a summary for every evaluation metric
+scalar_summaries.append(tf.summary.scalar('total_loss', model.loss))
+
+render_summaries = []
+if args['summaries']['show_reders']:
+	for obj_id in args['summaries']['render']:
+		image_tensor = draw_render(model.output3, tf.convert_to_tensor(pkl[5][2]), 'matplotlib')
+		render_summaries.append(tf.summary.image(f'Render {obj_id}', image_tensor))
+
 train_writer = model.get_train_writer(sess)
 test_writer = model.get_train_writer(sess)
 
@@ -113,11 +117,20 @@ for epoch in range(saved_epoch, FLAGS.epochs):
 		feed_dict.update({placeholders['img_inp']: img_inp})
 		feed_dict.update({placeholders['labels']: y_train})
 
-		# Training step
-		_, step, summary, dists,out1,out2,out3 = sess.run([model.opt_op, model.get_step(), merged, model.loss,model.output1,model.output2,model.output3], feed_dict=feed_dict)
+		# Training step depends on if we want to show the summaries or not
+
+		tensors = [model.opt_op, model.get_step(), model.loss, model.output1, model.output2, model.output3]
+		tensors.extend(scalar_summaries)
+		for r_s in range(render_summaries):
+			if iters in args['summaries']['render']:
+				tensors.append(r_s)
+
+		output = sess.run(tensors, feed_dict=feed_dict)
+		#_, step, dists, out1, out2, out3, summary...
+		step = output[1], dists = output[2], out1 = output[3], out2 = output[4], out3 = output[5]
 
 		# Add the summaries to tensorboard
-		train_writer.add_summary(summary, step)
+		[train_writer.add_summary(s, step) for s in output[6:]]		# the rest of the outputs are summaries
 
 		all_loss[iters] = dists
 		mean_loss = np.mean(all_loss[np.where(all_loss)])
