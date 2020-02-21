@@ -52,6 +52,8 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
 
     ax = f.add_subplot(111, projection='3d')
     #ax.axis('off')
+    gt_points -= gt_points.mean(axis=0)
+    gt_points /= np.linalg.norm(gt_points, axis=1).max()
     ax.scatter(gt_points[:, 0], gt_points[:, 1], gt_points[:, 2], c='lightgray', marker='.', s=10)
     _set_unit_limits_in_3d_plot(ax)
 
