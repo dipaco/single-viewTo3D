@@ -27,7 +27,7 @@ def draw_scatter(scaled, colors):
 def draw_render(vertices, faces, render_type='matplotlib'):
     colors = ['r']
     '''Draw scatter plots. One for each color.'''
-    figs = tfmpl.create_figures(len(colors), figsize=(2,2))
+    figs = tfmpl.create_figures(len(colors), figsize=(3,3), dpi=100)
     for idx, f in enumerate(figs):
         ax = f.add_subplot(111, projection='3d')
         ax.axis('off')
@@ -40,10 +40,10 @@ def draw_render(vertices, faces, render_type='matplotlib'):
 
 
         ax.add_collection3d(
-            Poly3DCollection(triangles, facecolors='blue', linewidths=.1, edgecolors='black', alpha=0.1))
+            Poly3DCollection(triangles, facecolors='ligthgray', linewidths=.05, edgecolors='black', alpha=0.2))
         _set_unit_limits_in_3d_plot(ax)
 
-        f.tight_layout()
+        #f.tight_layout()
 
     return figs
 
