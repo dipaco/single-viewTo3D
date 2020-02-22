@@ -36,8 +36,9 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
         # getting the triangles of the mesh
         vertices -= vertices.mean(axis=0)
         vertices /= np.linalg.norm(vertices, axis=1).max()
-        triangles = [vertices[faces[:, i], :] for i in range(faces.shape[1])]
-        triangles = np.transpose(triangles, axes=[1, 0, 2])
+        triangles = vertices[faces]
+        #triangles = [vertices[faces[:, i], :] for i in range(faces.shape[1]-1)]
+        #triangles = np.transpose(triangles, axes=[1, 0, 2])
 
         # rotate the mesh
         ang = angles[idx]
