@@ -28,10 +28,11 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
 
     # INFO: For visualization purpose on matplotlib we rotate all the points 90º around the x-axis
     # to aling the z axis with the up direction.
+    p_idx = np.random.choice(gt_points.shape[0], 1024, replace=False)
     rot_mat = np.array([[1.0, 0.0, 0.0],
                         [0, 0.0, -1.0],
                         [0.0, 1.0, 0.0]])
-    gt_points = np.einsum('dc,nc -> nd', rot_mat, gt_points)
+    gt_points = np.einsum('dc,nc -> nd', rot_mat, gt_points[p_idx, :3])
     vertices = np.einsum('dc,nc -> nd', rot_mat, vertices)
 
     angles = [0, np.pi/3]
@@ -61,8 +62,7 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
 
     ax = figs[-1].add_subplot(111, projection='3d')
     #ax.axis('off')
-    p_idx = np.random.choice(gt_points.shape[0], 1024, replace=False)
-    gt_points = gt_points[p_idx, :3]  - gt_points[p_idx, :3].mean(axis=0)
+    gt_points = gt_points - gt_points.mean(axis=0)
     gt_points /= np.linalg.norm(gt_points, axis=1).max()
     ax.scatter(gt_points[:, 0], gt_points[:, 1], gt_points[:, 2], c='gray', marker='.', s=10)
     _set_unit_limits_in_3d_plot(ax)
