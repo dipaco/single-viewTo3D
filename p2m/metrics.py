@@ -6,7 +6,7 @@ sys.path.append('./external')
 import tensorflow as tf
 import tf_sampling
 import tf_auctionmatch
-import tf_nndistances
+import tf_nndistance
 import tf_approxmatch
 
 
