@@ -25,6 +25,15 @@ def draw_scatter(scaled, colors):
 
 @tfmpl.figure_tensor
 def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
+
+    # INFO: For visualization purpose on matplotlib we rotate all the points 90º around the x-axis
+    # to aling the z axis with the up direction.
+    rot_mat = np.array([[1.0, 0.0, 0.0],
+                        [0, 0.0, -1.0],
+                        [0.0, 1.0, 0.0]])
+    gt_points = np.einsum('dc,nc -> nd', rot_mat, gt_points)
+    vertices = np.einsum('dc,nc -> nd', rot_mat, vertices)
+
     angles = [0, np.pi/3]
     '''Draw scatter plots. One for each color.'''
     figs = tfmpl.create_figures(len(angles) + 1, figsize=(2, 2), dpi=150)
@@ -37,8 +46,6 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
         vertices -= vertices.mean(axis=0)
         vertices /= np.linalg.norm(vertices, axis=1).max()
         triangles = vertices[faces]
-        #triangles = [vertices[faces[:, i], :] for i in range(faces.shape[1]-1)]
-        #triangles = np.transpose(triangles, axes=[1, 0, 2])
 
         # rotate the mesh
         ang = angles[idx]
