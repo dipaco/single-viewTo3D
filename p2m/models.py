@@ -326,8 +326,8 @@ class GCN(Model):
         summaries_dict.append({'name': 'edge-length', 'var': elm})
 
         # Assess the EMD between the predicted mesh and the ground truth mesh
-        dist, matched_out = emd_distance(self.output3, self.placeholders, 3)
-        summaries_dict.append({'name': 'EMD1', 'var': tf.reduce_mean(dist)})
+        #dist, matched_out = emd_distance(self.output3, self.placeholders, 3)
+        #summaries_dict.append({'name': 'EMD1', 'var': tf.reduce_mean(dist)})
 
         elm2, cd = nn_metrics(self.output3, self.placeholders, 3)
         # Assess the EMD between the predicted mesh and the ground truth mesh

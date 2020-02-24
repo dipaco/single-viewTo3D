@@ -5,7 +5,7 @@ import sys
 sys.path.append('./external')
 import tensorflow as tf
 import tf_sampling
-import tf_auctionmatch
+#import tf_auctionmatch
 import tf_nndistance
 import tf_approxmatch
 
@@ -46,7 +46,7 @@ def nn_metrics(pred, placeholders, block_id=3):
     gt_pt = placeholders['labels'][:, :3][:n_points, ...][None, ...]  # gt points
     pred = pred[:n_points, ...][None, ...]
 
-    dist1, idx1, dist2, idx2 = tf_nndistances.nn_distance(gt_pt, pred)
+    dist1, idx1, dist2, idx2 = tf_nndistance.nn_distance(gt_pt, pred)
     # earth mover distance, notice that emd_dist return the sum of all distance
     match = tf_approxmatch.approx_match(gt_pt, pred)
 
