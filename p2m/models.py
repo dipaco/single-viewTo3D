@@ -319,6 +319,9 @@ class GCN(Model):
         summaries_dict = list()
 
         # Assess self intersection of the predicted mesh
+        meshes = dict()
+        meshes['num_verts_per_mesh'] = [4, 4]
+        meshes['num_faces_per_mesh'] = [5, 5]
         summaries_dict.append({'name': 'self-intersection', 'var': self._self_inter()})
 
         # Edge length metric
