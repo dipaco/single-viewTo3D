@@ -46,7 +46,7 @@ flags = tf.app.flags
 FLAGS = flags.FLAGS
 flags.DEFINE_string('data_list', args['dataset']['train_files'], 'Data list.') # training data list
 flags.DEFINE_float('learning_rate', 1e-5, 'Initial learning rate.')
-flags.DEFINE_integer('epochs', 50, 'Number of epochs to train.')
+flags.DEFINE_integer('epochs', 500, 'Number of epochs to train.')
 flags.DEFINE_integer('hidden', 256, 'Number of units in hidden layer.') # gcn hidden layer channel
 flags.DEFINE_integer('feat_dim', 963, 'Number of units in feature layer.') # image feature dim
 flags.DEFINE_integer('coord_dim', 3, 'Number of units in output layer.') 

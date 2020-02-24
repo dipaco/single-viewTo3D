@@ -40,8 +40,8 @@ def chamfer_metric(pred, placeholders, block_id=3):
         output: dist: (batch_size,#point_1)   symmetric Chamfer distance between the two point clouds
     """
 
-    gt_pt = placeholders['labels'][:, :3][None, ...]  # gt points
-    pred = pred[None, ...]
+    gt_pt = placeholders['labels'][:, :3]  # gt points
+    pred = pred
     dist1, idx1, dist2, idx2 = nn_distance(gt_pt, pred)
     cd = tf.reduce_mean(dist1) + tf.reduce_mean(dist2)
 
