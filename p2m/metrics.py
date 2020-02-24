@@ -41,6 +41,7 @@ def chamfer_metric(pred, placeholders, block_id=3):
     """
 
     gt_pt = placeholders['labels'][:, :3][None, ...]  # gt points
+    pred = pred[None, ...]
     dist1, idx1, dist2, idx2 = nn_distance(gt_pt, pred)
     cd = tf.reduce_mean(dist1) + tf.reduce_mean(dist2)
 
