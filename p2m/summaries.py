@@ -30,7 +30,7 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
     # to aling the z axis with the up direction.
     p_idx = np.random.choice(gt_points.shape[0], 1024, replace=False)
     rot_mat = np.array([[1.0, 0.0, 0.0],
-                        [0, 0.0, -1.0],
+                        [0, 0.0, 1.0],
                         [0.0, 1.0, 0.0]])
     gt_points = np.einsum('dc,nc -> nd', rot_mat, gt_points[p_idx, :3])
     vertices = np.einsum('dc,nc -> nd', rot_mat, vertices)
