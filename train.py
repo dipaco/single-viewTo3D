@@ -99,10 +99,12 @@ scalar_summaries = [tf.summary.scalar(metric['name'], metric['var'], family='Met
 scalar_summaries.append(tf.summary.scalar('total_loss', model.loss, family='Losses'))
 
 render_summaries = []
+gt_image_summaries = []
 if args['summaries']['show_renders']:
 	image_tensor = draw_render(placeholders['labels'], model.output3, tf.convert_to_tensor(pkl[5][2]), 'matplotlib')
 	for obj_id in args['summaries']['render']:
-		render_summaries.append(tf.summary.image(f'Render {obj_id}', image_tensor))
+		render_summaries.append(tf.summary.image(f'Mesh Render', image_tensor, family=f'Object {obj_id}'))
+		gt_image_summaries.append(tf.summary.image(f'Ground truth image', placeholders['img_inp'][None, ...], family=f'Object {obj_id}'))
 
 train_writer = model.get_train_writer(sess)
 test_writer = model.get_train_writer(sess)
@@ -124,6 +126,7 @@ for epoch in range(saved_epoch, FLAGS.epochs):
 
 		if obj_id in args['summaries']['render']:
 			tensors.append(render_summaries[args['summaries']['render'].index(obj_id)])
+			tensors.append(gt_image_summaries[args['summaries']['render'].index(obj_id)])
 		
 		output = sess.run(tensors, feed_dict=feed_dict)
 		#_, step, dists, out1, out2, out3, summary...
