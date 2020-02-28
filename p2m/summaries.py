@@ -30,14 +30,14 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
     # to aling the z axis with the up direction.
     p_idx = np.random.choice(gt_points.shape[0], 1024, replace=False)
     rot_mat = np.array([[1.0, 0.0, 0.0],
-                        [0, 0.0, 1.0],
+                        [0, 0.0, -1.0],
                         [0.0, 1.0, 0.0]])
     gt_points = np.einsum('dc,nc -> nd', rot_mat, gt_points[p_idx, :3])
     vertices = np.einsum('dc,nc -> nd', rot_mat, vertices)
 
-    angles = [0, np.pi/3]
+    angles = [0, np.pi/3, 2*np.pi/3]
     '''Draw scatter plots. One for each color.'''
-    figs = tfmpl.create_figures(len(angles) + 1, figsize=(3, 3), dpi=200)
+    figs = tfmpl.create_figures(len(angles), figsize=(3, 3), dpi=200)
     for idx in range(len(angles)):
         f = figs[idx]
         ax = f.add_subplot(111, projection='3d')
@@ -60,13 +60,13 @@ def draw_render(gt_points, vertices, faces, render_type='matplotlib'):
         _set_unit_limits_in_3d_plot(ax)
         f.tight_layout()
 
-    ax = figs[-1].add_subplot(111, projection='3d')
+    #ax = figs[-1].add_subplot(111, projection='3d')
     #ax.axis('off')
-    gt_points = gt_points - gt_points.mean(axis=0)
-    gt_points /= np.linalg.norm(gt_points, axis=1).max()
-    ax.scatter(gt_points[:, 0], gt_points[:, 1], gt_points[:, 2], c='gray', marker='.', s=10)
-    _set_unit_limits_in_3d_plot(ax)
-    figs[-1].tight_layout()
+    #gt_points = gt_points - gt_points.mean(axis=0)
+    #gt_points /= np.linalg.norm(gt_points, axis=1).max()
+    #ax.scatter(gt_points[:, 0], gt_points[:, 1], gt_points[:, 2], c='gray', marker='.', s=10)
+    #_set_unit_limits_in_3d_plot(ax)
+    #figs[-1].tight_layout()
 
     return figs
 
