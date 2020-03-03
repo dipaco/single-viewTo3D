@@ -3,3 +3,8 @@ dataset:
   test_files: Data/test_list_partial.txt
 logging:
   save_dir: Data/logs/log_partial
+training:
+  timeout: 2400000
+summaries:
+  show_renders: True
+  render: ['81a7007ead4051cd22ed3259ee7e608a', '9a7f267890144d4a7afe2ae8eef63a8c', 'b8469c14aeb092f74fde46457697d80', 'bcd6db8d23cbb9a9cf19858fd1963d10', 'ada8ce574ee473827c373e0e7470a338', '5929d3983eeb8d5cbf96d22e92924ea2', '49e4cffd7736c34362b21e1bf23b9ba8', '64abde6390fa65fe26ffa6f51f050119', '48df2496242053da4ee0fb6a51564c3', '1d7eb22189100710ca8607f540cc62ba']
