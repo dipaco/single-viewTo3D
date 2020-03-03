@@ -1,0 +1,10 @@
+dataset:
+  train_files: Data/train_list_tiny_sofa.txt
+  test_files: Data/test_list_tiny_sofa.txt
+logging:
+  save_dir: Data/logs/log_tiny_sofa
+training:
+  timeout: 240000
+summaries:
+  show_renders: True
+  render: ['81a7007ead4051cd22ed3259ee7e608a', '9a7f267890144d4a7afe2ae8eef63a8c', 'b8469c14aeb092f74fde46457697d80', 'bcd6db8d23cbb9a9cf19858fd1963d10', 'ada8ce574ee473827c373e0e7470a338']

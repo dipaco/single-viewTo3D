@@ -1,0 +1,10 @@
+dataset:
+  train_files: Data/train_list_chair.txt
+  test_files: Data/test_list_chair.txt
+logging:
+  save_dir: Data/logs/log_chair
+training:
+  timeout: 2400000
+summaries:
+  show_renders: True
+  render: ['a521fba02ca7f9aa822215026d1e8d82', '90a15feb4f77c63e5e73882ba2654055', '3230b6c7f396afff19fb4103277a6b93', '465ea1eb1c76c1478d1fe8cdc415f4c5', 'a8d357344e421ff21e12bb4aebfe8421']

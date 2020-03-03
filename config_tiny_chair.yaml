@@ -1,0 +1,10 @@
+dataset:
+  train_files: Data/train_list_tiny_chair.txt
+  test_files: Data/test_list_tiny_chair.txt
+logging:
+  save_dir: Data/logs/log_tiny_chair
+training:
+  timeout: 240000
+summaries:
+  show_renders: True
+  render: ['6dd44ada2f481c776dddf6f75fbd4a4c', '577d1c446658fdc7ebc935c637c3e3a0', '325bf2aee84a1fcdfebad4f49b26ec52', '477dfe89f1d5df337fa68300c57bff0a', 'c1c0b3d35cdef5e2f51fa0238791f5dc']
